@@ -1,0 +1,19 @@
+<md-toolbar>
+  <div class="md-toolbar-tools">
+    ¡Jugadores!
+  </div>
+</md-toolbar>
+<div layout="row" layout-wrap layout-margin>
+  <md-card ng-repeat="player in vm.players" flex>
+    <md-card-header layout="row" layout-align="space-between center">
+      <md-card-title>
+        {{ player.Name }} {{ player.LastName }}
+      </md-card-title>
+      <md-button class="md-icon-button md-accent" ng-click="vm.deletePlayer(player.ID)">
+        <md-icon>
+          delete
+        </md-icon>
+      </md-button>
+    </md-card-header>
+  </md-card>
+</div>
