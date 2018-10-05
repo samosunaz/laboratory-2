@@ -3,6 +3,24 @@
     ¡Jugadores!
   </div>
 </md-toolbar>
+<div layout="row" layout-align="start center" layout-margin>
+  <ng-form name="playerForm">
+    <md-input-container>
+      <label>ID</label>
+      <input type="text" ng-model="vm.player.ID" ng-required="true">
+    </md-input-container>
+    <md-input-container>
+      <label>Nombre</label>
+      <input type="text" ng-model="vm.player.Name" ng-required="true">
+    </md-input-container>
+    <md-input-container>
+      <label>Apellidos</label>
+      <input type="text" ng-model="vm.player.LastName" ng-required="true">
+    </md-input-container>
+    </form>
+    <md-button class="md-accent md-raised" ng-disabled="playerForm.$invalid" ng-click="vm.createPlayer()">Agregar</md-button>
+    <md-button class="md-primary" ng-click="vm.deletePlayers()">Borrar todo</md-button>
+</div>
 <div layout="row" layout-wrap layout-margin>
   <md-card ng-repeat="player in vm.players" flex>
     <md-card-header layout="row" layout-align="space-between center">

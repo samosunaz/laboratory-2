@@ -17,6 +17,7 @@ func main() {
 	mxRouter.HandleFunc("/players", getPlayers).Methods("GET")
 	mxRouter.HandleFunc("/players", addPlayer).Methods("POST")
 	mxRouter.HandleFunc("/players", updatePlayer).Methods("PUT")
+	mxRouter.HandleFunc("/players", deleteAll).Methods("DELETE")
 	mxRouter.HandleFunc("/players/{id}", deletePlayer).Methods("DELETE")
 	mxRouter.HandleFunc("/players/{id}", getPlayer).Methods("GET")
 	mxRouter.Methods("GET")
@@ -28,12 +29,19 @@ func main() {
 }
 
 func addPlayer(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	name := vars["name"]
-	id := vars["id"]
-	lastName := vars["lastName"]
-	newPlayer := Player{ID: id, Name: name, LastName: lastName}
+	enableCors(&w)
+	decoder := json.NewDecoder(r.Body)
+	var newPlayer Player
+	err := decoder.Decode(&newPlayer)
+	if err != nil {
+		panic(err)
+	}
 	players = append(players, newPlayer)
+}
+
+func deleteAll(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
+	players = players[:0]
 }
 
 func deletePlayer(w http.ResponseWriter, r *http.Request) {
@@ -51,7 +59,17 @@ func deletePlayer(w http.ResponseWriter, r *http.Request) {
 }
 
 func getPlayer(w http.ResponseWriter, r *http.Request) {
-
+	enableCors(&w)
+	vars := mux.Vars(r)
+	id := vars["id"]
+	var currentPlayer Player
+	for _, currentPlayer = range players {
+		if currentPlayer.ID != id {
+			players[i] = currentPlayer
+			i++
+		}
+	}
+	json.NewEncoder(W).Encode(currentPlayer)
 }
 
 func getPlayers(w http.ResponseWriter, r *http.Request) {
@@ -70,6 +88,7 @@ func init() {
 }
 
 func enableCors(w *http.ResponseWriter) {
+	(*w).Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	(*w).Header().Set("Access-Control-Allow-Methods", "*")
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 }

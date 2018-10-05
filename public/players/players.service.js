@@ -8,7 +8,9 @@
     var apiUrl = "http://localhost:8000";
 
     this.all = all;
+    this.create = create;
     this.eliminate = eliminate;
+    this.eliminateAll = eliminateAll;
 
     ////////////////
 
@@ -29,9 +31,23 @@
         .catch(onError);
     }
 
+    function create(player) {
+      return $http
+        .post(`${apiUrl}/players`, player)
+        .then(onSuccess)
+        .catch(onError);
+    }
+
     function eliminate(playerId) {
       return $http
         .delete(`${apiUrl}/players/${playerId}`)
+        .then(onSuccess)
+        .catch(onError);
+    }
+
+    function eliminateAll() {
+      return $http
+        .delete(`${apiUrl}/players`)
         .then(onSuccess)
         .catch(onError);
     }
